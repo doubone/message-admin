@@ -6,12 +6,12 @@ const onerror = require('koa-onerror')
 const bodyparser = require('koa-bodyparser')
 const logger = require('koa-logger')
 const Mysql = require('./lib/mysql')
-
 const index = require('./routes/index')
 const users = require('./routes/users')
 
 // error handler
 onerror(app)
+
 
 // middlewares
 app.use(bodyparser({
@@ -25,14 +25,16 @@ app.use(views(__dirname + '/views', {
   extension: 'pug'
 }))
 
-app.use(async (ctx)=>{
-  let res= await Mysql.query();
-  ctx.body={
-    "code":200,
-    "data":res,
-    "msg":'ok'
-  }
-})
+
+
+// app.use(async (ctx)=>{
+//   let res= await Mysql.query();
+//   ctx.body={
+//     "code":200,
+//     "data":res,
+//     "msg":'ok'
+//   }
+// })
 
 // logger
 app.use(async (ctx, next) => {
@@ -45,6 +47,13 @@ app.use(async (ctx, next) => {
 // routes
 app.use(index.routes(), index.allowedMethods())
 app.use(users.routes(), users.allowedMethods())
+
+
+const Pug = require('koa-pug');
+new Pug({
+  app,
+  viewPath:'./views'
+})
 
 // error-handling
 app.on('error', (err, ctx) => {

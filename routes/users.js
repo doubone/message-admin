@@ -10,4 +10,9 @@ router.get('/bar', function (ctx, next) {
   ctx.body = 'this is a users/bar response'
 })
 
+router.get('/login',async(ctx,next)=>{
+  await ctx.render('layout')
+  // ctx.body = "login"
+})
+
 module.exports = router
