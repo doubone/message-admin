@@ -49,11 +49,11 @@ app.use(index.routes(), index.allowedMethods())
 app.use(users.routes(), users.allowedMethods())
 
 
-const Pug = require('koa-pug');
-new Pug({
-  app,
-  viewPath:'./views'
-})
+// const Pug = require('koa-pug');
+// new Pug({
+//   app,
+//   viewPath:'./views'
+// })
 
 // error-handling
 app.on('error', (err, ctx) => {

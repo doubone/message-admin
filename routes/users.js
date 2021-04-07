@@ -11,7 +11,7 @@ router.get('/bar', function (ctx, next) {
 })
 
 router.get('/login',async(ctx,next)=>{
-  await ctx.render('layout')
+  await ctx.render('login')
   // ctx.body = "login"
 })
 
