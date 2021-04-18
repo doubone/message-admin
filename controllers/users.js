@@ -11,16 +11,23 @@ exports.doLogin = async function (ctx, next) {
         // 参数校验
         // 链接数据库查询
         const connection = connectionModel.getConnection()
-        // const result = await connection.query(`select * from user where
-        // username = '${data.username}'
-        // and password = '${data.password}'`)
-        // console.log(result)
-
-        // const query = bluebird.promisify(connection.query.bind(connection));
-        const query = connection.query
-        
-		const results = await connection.query(`select * from user where username = '${data.username}' and password = '${data.password}'`);
+        const query = bluebird.promisify(connection.query.bind(connection));
+        const results = await query(`select * from user where username = '${data.username}' and password = '${data.password}'`);
         console.log(results)
+        if(results.length){
+            let user = results[0];
+            //登录成功，设置cookie
+            ctx.cookies.set('userId',user.id,{httpOnly:false});
+            ctx.body = {
+                code:200,
+                data:{
+                    id:user.id,
+                    name:user.name
+                }
+            }
+        }else{
+            throw new Error('登录失败，请稍后再试')
+        }
     } catch (err) {
         console.log(err)
     }
