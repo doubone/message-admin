@@ -13,7 +13,6 @@ exports.doLogin = async function (ctx, next) {
         const connection = connectionModel.getConnection()
         const query = bluebird.promisify(connection.query.bind(connection));
         const results = await query(`select * from user where username = '${data.username}' and password = '${data.password}'`);
-        console.log(results)
         if(results.length){
             let user = results[0];
             //登录成功，设置cookie
@@ -28,6 +27,7 @@ exports.doLogin = async function (ctx, next) {
         }else{
             throw new Error('登录失败，请稍后再试')
         }
+        connection.end();
     } catch (err) {
         console.log(err)
     }
