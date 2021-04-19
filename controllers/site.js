@@ -119,8 +119,9 @@ exports.addComment = async function (ctx, next) {
 		const connection = connectionModel.getConnection();
 		const query = bluebird.promisify(connection.query.bind(connection));
 		const result = await query(
-			`insert into comment(userId,postId,content,createdAt) values("${ctx.cookies.get('userId')}||''", "${data.postId}", "${data.content}",${connection.escape(new Date())})`
+			`insert into comment(userId,postId,content,createdAt) values("${ctx.cookies.get('userId')||0}", "${data.postId}", "${data.content}",${connection.escape(new Date())})`
 		);
+		ctx.append("Sec-Fetch-Site","cross-site")
 		if (result) {
 			ctx.redirect(`/post/${data.postId}`);
 		} else {

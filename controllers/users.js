@@ -16,7 +16,7 @@ exports.doLogin = async function (ctx, next) {
         if(results.length){
             let user = results[0];
             //登录成功，设置cookie
-            ctx.cookies.set('userId',user.id,{httpOnly:false});
+            ctx.cookies.set('userId',user.id,{httpOnly:false,sameSite:'strict'});
             ctx.body = {
                 code:200,
                 data:{
