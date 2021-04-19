@@ -119,7 +119,7 @@ exports.addComment = async function (ctx, next) {
 		const connection = connectionModel.getConnection();
 		const query = bluebird.promisify(connection.query.bind(connection));
 		const result = await query(
-			`insert into comment(userId,postId,content,createdAt) values("00001", "${data.postId}", "${data.content}",${connection.escape(new Date())})`
+			`insert into comment(userId,postId,content,createdAt) values("${ctx.cookies.get('userId')}||''", "${data.postId}", "${data.content}",${connection.escape(new Date())})`
 		);
 		if (result) {
 			ctx.redirect(`/post/${data.postId}`);
