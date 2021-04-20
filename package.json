@@ -9,7 +9,7 @@
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "dependencies": {
-    "axios": "~0.16.0",
+    "axios": "~0.21.1",
     "bluebird": "^3.7.2",
     "ccap": "^0.6.10",
     "debug": "^4.1.1",
