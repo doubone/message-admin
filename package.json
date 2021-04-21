@@ -11,6 +11,7 @@
   "dependencies": {
     "axios": "~0.16.0",
     "bluebird": "^3.7.2",
+    "ccap": "^0.6.10",
     "debug": "^4.1.1",
     "form-serialize": "^0.7.2",
     "koa": "^2.7.0",

@@ -82,6 +82,8 @@ var xssFilter = function (html) {
 exports.post = async function (ctx, next) {
 	try {
 		console.log('enter post');
+		var csrfToken = parseInt(Math.random()*9999999,10)
+		ctx.cookies.set('csrfToken',csrfToken)
 
 		const id = ctx.params.id;
 		const connection = connectionModel.getConnection();
@@ -98,7 +100,7 @@ exports.post = async function (ctx, next) {
 		// 	comment.content = xssFilter(comment.content)
 		// });
 		if (post) {
-			await ctx.render('post', { post, comments });
+		await	ctx.render('post', { post, comments ,csrfToken});
 		} else {
 			ctx.status = 404;
 		}
@@ -122,6 +124,28 @@ exports.addComment = async function (ctx, next) {
 			data = ctx.query.body
 		}
 		console.log(data)
+		// console.log(data)
+		// if(!data.captcha){
+		// 	throw new Error('验证码错误')
+		// }
+		// var captcha = require('../tools/captcha')
+		// var resultCaptche = captcha.validCache(ctx.cookies.get('userId'),data.captche);
+		// if(!resultCaptche){
+		// 	throw new Error('验证码错误')
+		// }
+		// if(!data.csrfToken){
+		// 	throw new Error('CSRF Token为空')
+		// }
+		// if(data.csrfToken !== ctx.cookies.get('csrfToken')){
+		// 	throw new Error('CSRF Token错误')
+		// }
+		const referer = ctx.request.headers.referer;
+		if(referer.indexOf('localhost')=== -1){
+			throw new Error('非法请求')
+		}
+		if(!/^https?:\/\/localhost/.test(referer)){
+			throw new Error('非法请求')
+		}
 		const connection = connectionModel.getConnection();
 		const query = bluebird.promisify(connection.query.bind(connection));
 		const result = await query(
