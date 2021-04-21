@@ -23,7 +23,7 @@ var escapeForJs = function (str) {
 
 
 exports.index = async function (ctx, next) {
-	
+
 	// 创建数据库链接
 	const connection = connectionModel.getConnection();
 
@@ -36,7 +36,7 @@ exports.index = async function (ctx, next) {
 	const comments = await query(
 		'select comment.*,post.id as postId,post.title as postTitle,user.username as username from comment left join post on comment.postId = post.id left join user on comment.userId = user.id order by comment.id desc limit 10'
 	);
- 	await ctx.render('index',
+	await ctx.render('index',
 		{
 			posts,
 			comments,
@@ -75,7 +75,7 @@ var xssFilter = function (html) {
 	var xss = require('xss');
 	var ret = xss(html);
 	return ret;
-	 
+
 
 
 }
@@ -98,7 +98,7 @@ exports.post = async function (ctx, next) {
 		// 	comment.content = xssFilter(comment.content)
 		// });
 		if (post) {
-		await	ctx.render('post', { post, comments });
+			await ctx.render('post', { post, comments });
 		} else {
 			ctx.status = 404;
 		}
@@ -114,14 +114,19 @@ exports.post = async function (ctx, next) {
 
 exports.addComment = async function (ctx, next) {
 	try {
-		const data = ctx.request.body;
+		let data;
+		if (ctx.method == 'POST') {
+			data = ctx.request.body;
+
+		} else {
+			data = ctx.query.body
+		}
 		console.log(data)
 		const connection = connectionModel.getConnection();
 		const query = bluebird.promisify(connection.query.bind(connection));
 		const result = await query(
-			`insert into comment(userId,postId,content,createdAt) values("${ctx.cookies.get('userId')||0}", "${data.postId}", "${data.content}",${connection.escape(new Date())})`
+			`insert into comment(userId,postId,content,createdAt) values("${ctx.cookies.get('userId') || 0}", "${data.postId}", "${data.content}",${connection.escape(new Date())})`
 		);
-		ctx.append("Sec-Fetch-Site","cross-site")
 		if (result) {
 			ctx.redirect(`/post/${data.postId}`);
 		} else {

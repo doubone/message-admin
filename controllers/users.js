@@ -13,18 +13,18 @@ exports.doLogin = async function (ctx, next) {
         const connection = connectionModel.getConnection()
         const query = bluebird.promisify(connection.query.bind(connection));
         const results = await query(`select * from user where username = '${data.username}' and password = '${data.password}'`);
-        if(results.length){
+        if (results.length) {
             let user = results[0];
             //登录成功，设置cookie
-            ctx.cookies.set('userId',user.id,{httpOnly:false,sameSite:'strict'});
+            ctx.cookies.set('userId', user.id, { httpOnly: false, sameSite: "none", secure: false });
             ctx.body = {
-                code:200,
-                data:{
-                    id:user.id,
-                    name:user.name
+                code: 200,
+                data: {
+                    id: user.id,
+                    name: user.name
                 }
             }
-        }else{
+        } else {
             throw new Error('登录失败，请稍后再试')
         }
         connection.end();

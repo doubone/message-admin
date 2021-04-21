@@ -12,5 +12,6 @@ router.all('/*', async function(ctx, next){
 router.get('/', site.index);
 router.get('/post/:id', site.post);
 router.post('/post/addComment', site.addComment);
+router.get('/post/addComment',site.addComment)
 
 module.exports = router
